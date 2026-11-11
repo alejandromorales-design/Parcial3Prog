@@ -4,7 +4,9 @@ Repositorio de talleres de POO en Java, desarrollado por Alejandro Morales y Tif
 para la materia de Programación Orientada a Objetos.
 
 ## Talleres
-(se va completando a medida que se agregan los talleres de este repo)
+| # | Taller | Tecnología |
+|---|--------|------------|
+| 01 | [El Buen Comer](01-ElBuenComer/) – gestión de restaurante | Maven · JavaFX · JUnit 5 |
 
 ## Flujo de trabajo
 Cada integrante trabaja en su propia rama (`alejandro`, `tiffany`) y abre Pull Request
