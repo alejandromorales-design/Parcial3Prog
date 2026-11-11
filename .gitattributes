@@ -1,0 +1,6 @@
+# Normaliza finales de línea y fuerza texto para evitar archivos corruptos entre PCs
+* text=auto
+*.java text eol=lf
+*.md text eol=lf
+*.png binary
+*.pdf binary
