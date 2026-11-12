@@ -38,7 +38,7 @@ public class Bebida extends Producto {
     }
 
     /**
-     * @return precio base mas el 10 %, y $3.000 adicionales si requiere preparacion especial
+     * @return precio base mas el 10 % y $3.000 adicionales si requiere preparacion especial
      */
     @Override
     public double calcularPrecioVenta() {
