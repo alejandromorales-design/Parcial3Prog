@@ -13,18 +13,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Java 21 (LTS): compila igual con JDK 21, 25 o 26 en cualquiera de los dos PCs -->
         <maven.compiler.release>21</maven.compiler.release>
-        <javafx.version>21.0.13</javafx.version>
         <junit.version>5.14.4</junit.version>
         <mainClass>co.edu.uniquindio.elbuencomer.app.Main</mainClass>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -47,16 +40,13 @@
                 <version>3.5.2</version>
             </plugin>
 
-            <!-- mvn javafx:run  -> abre la ventana de la aplicacion -->
+            <!-- mvn compile exec:java  ->  corre el menu de consola (Main) -->
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
                 <configuration>
                     <mainClass>${mainClass}</mainClass>
-                    <options>
-                        <option>--enable-native-access=javafx.graphics</option>
-                    </options>
                 </configuration>
             </plugin>
         </plugins>
