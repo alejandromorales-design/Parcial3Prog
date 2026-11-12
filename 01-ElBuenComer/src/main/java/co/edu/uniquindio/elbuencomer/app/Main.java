@@ -5,13 +5,11 @@ import co.edu.uniquindio.elbuencomer.modelo.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// ============================================================================
-// Main.java
-// ----------------------------------------------------------------------------
-// Menu de consola para probar el sistema de "El Buen Comer": registrar
-// productos, clientes, pedidos, confirmar pedidos, calcular valores totales,
-// consultar historiales, y las consultas adicionales de negocio.
-// ============================================================================
+/**
+ * Menu de consola para probar el sistema de "El Buen Comer": registrar
+ * productos, clientes, pedidos, confirmar pedidos, calcular valores totales,
+ * consultar historiales, y las consultas adicionales de negocio.
+ */
 public class Main {
 
     private static Restaurante restaurante;
@@ -19,6 +17,13 @@ public class Main {
     private static EntregaSegura entregaSegura = new EntregaSegura();
     private static Scanner sc = new Scanner(System.in);
 
+    /**
+     * Punto de entrada de la aplicacion. Inicializa el restaurante con
+     * datos de ejemplo y muestra el menu principal hasta que el usuario
+     * decida salir.
+     *
+     * @param args argumentos de linea de comandos (no se usan)
+     */
     public static void main(String[] args) {
         restaurante = new Restaurante("El Buen Comer", "900123456-7", "Cra 19 # 8-45, Armenia");
         precargarDatosDeEjemplo();
@@ -48,6 +53,9 @@ public class Main {
         }
     }
 
+    /**
+     * Imprime las opciones del menu principal.
+     */
     private static void mostrarMenuPrincipal() {
         System.out.println("\n===== EL BUEN COMER - MENU PRINCIPAL =====");
         System.out.println("1. Registrar producto");
@@ -59,9 +67,11 @@ public class Main {
         System.out.println("0. Salir");
     }
 
-    // ========================================================================
-    // 1. Registrar producto
-    // ========================================================================
+    /**
+     * Funcionalidad 1: pide por consola los datos del producto (segun su
+     * categoria: plato fuerte, bebida o postre) y lo registra en el
+     * restaurante.
+     */
     private static void crearProductoUI() {
         System.out.println("Categoria: 1.Plato fuerte  2.Bebida  3.Postre");
         int categoria = leerEntero("Opcion: ");
@@ -102,6 +112,11 @@ public class Main {
         System.out.println(ok ? "Producto registrado." : "Ya existe un producto con ese codigo.");
     }
 
+    /**
+     * Pide por consola el tipo de preparacion de un plato fuerte.
+     *
+     * @return el {@link TipoPreparacion} seleccionado
+     */
     private static TipoPreparacion leerTipoPreparacion() {
         System.out.println("Tipo de preparacion: 1.Asado 2.Frito 3.Horneado 4.A la plancha");
         int op = leerEntero("Opcion: ");
@@ -116,9 +131,10 @@ public class Main {
         }
     }
 
-    // ========================================================================
-    // 2. Registrar cliente
-    // ========================================================================
+    /**
+     * Funcionalidad 2: pide por consola los datos del cliente y lo
+     * registra en el restaurante (sin permitir documentos duplicados).
+     */
     private static void crearClienteUI() {
         String documento = leerTexto("Numero de documento: ");
         String nombre = leerTexto("Nombre completo: ");
@@ -131,9 +147,11 @@ public class Main {
         System.out.println(ok ? "Cliente registrado." : "Ya existe un cliente con ese documento.");
     }
 
-    // ========================================================================
-    // 3. Pedidos
-    // ========================================================================
+    /**
+     * Funcionalidad 3: submenu de pedidos. Permite crear un pedido,
+     * agregarle productos, asignarle domicilio, confirmarlo, marcarlo
+     * como entregado, cancelarlo o listar todos los pedidos.
+     */
     private static void menuPedidos() {
         int opcion = -1;
         while (opcion != 0) {
@@ -169,6 +187,10 @@ public class Main {
         }
     }
 
+    /**
+     * Pide por consola el codigo del pedido, el documento del cliente y la
+     * modalidad de entrega, y crea el pedido en el restaurante.
+     */
     private static void crearPedidoUI() {
         String codigo = leerTexto("Codigo del pedido: ");
         String documentoCliente = leerTexto("Documento del cliente: ");
@@ -180,6 +202,10 @@ public class Main {
         System.out.println(pedido != null ? "Pedido creado." : "No se pudo crear (codigo repetido o cliente inexistente).");
     }
 
+    /**
+     * Pide por consola el codigo de un pedido existente, el codigo de un
+     * producto existente y la cantidad, y agrega esa linea al pedido.
+     */
     private static void agregarProductoAPedidoUI() {
         String codigoPedido = leerTexto("Codigo del pedido: ");
         Pedido pedido = restaurante.buscarPedidoPorCodigo(codigoPedido);
@@ -198,6 +224,10 @@ public class Main {
         System.out.println("Producto agregado al pedido.");
     }
 
+    /**
+     * Pide por consola el codigo de un pedido, la empresa de domicilio a
+     * usar y la distancia del recorrido, y se la asigna al pedido.
+     */
     private static void asignarDomicilioUI() {
         String codigoPedido = leerTexto("Codigo del pedido: ");
         Pedido pedido = restaurante.buscarPedidoPorCodigo(codigoPedido);
@@ -209,8 +239,10 @@ public class Main {
         int op = leerEntero("Opcion: ");
         double distancia = leerDecimal("Distancia del recorrido (km): ");
 
-        // Se solicita el servicio a cualquiera de las dos empresas mediante
-        // el mismo procedimiento comun, gracias a la interface ServicioDomicilio.
+        /*
+         * Se solicita el servicio a cualquiera de las dos empresas mediante
+         * el mismo procedimiento comun, gracias a la interface ServicioDomicilio.
+         */
         ServicioDomicilio empresa = (op == 2) ? entregaSegura : rapidoExpress;
         pedido.asignarDomicilio(empresa, distancia);
         System.out.println(empresa.getNombreEmpresa() + " asignada. Costo de envio: $"
@@ -218,9 +250,10 @@ public class Main {
                 + " - Acepta el recorrido: " + empresa.aceptaRecorrido(distancia));
     }
 
-    // ========================================================================
-    // 4. Calcular valor total de un pedido
-    // ========================================================================
+    /**
+     * Funcionalidad 4: pide el codigo de un pedido y muestra su valor
+     * total (productos + domicilio si aplica).
+     */
     private static void consultarValorTotalPedidoUI() {
         String codigo = leerTexto("Codigo del pedido: ");
         double total = restaurante.calcularValorTotalPedido(codigo);
@@ -231,9 +264,10 @@ public class Main {
         }
     }
 
-    // ========================================================================
-    // 5. Consultar historial de pedidos de un cliente
-    // ========================================================================
+    /**
+     * Funcionalidad 5: pide el documento de un cliente y muestra todos
+     * los pedidos de su historial.
+     */
     private static void consultarHistorialUI() {
         String documento = leerTexto("Documento del cliente: ");
         ArrayList<Pedido> historial = restaurante.consultarHistorialPedidos(documento);
@@ -250,9 +284,11 @@ public class Main {
         }
     }
 
-    // ========================================================================
-    // 6. Consultas adicionales
-    // ========================================================================
+    /**
+     * Submenu de consultas adicionales sobre las ventas del restaurante:
+     * productos disponibles, producto mas vendido, categoria con mayores
+     * ingresos, e ingresos propios frente a ingresos por domicilio.
+     */
     private static void menuConsultasAdicionales() {
         int opcion = -1;
         while (opcion != 0) {
@@ -281,10 +317,13 @@ public class Main {
         }
     }
 
-    // ========================================================================
-    // Metodos de ayuda para leer datos por consola
-    // ========================================================================
-
+    /**
+     * Lee un entero por consola, repitiendo la pregunta hasta que el
+     * usuario escriba un valor numerico valido.
+     *
+     * @param mensaje texto que se le muestra al usuario antes de leer
+     * @return el entero leido
+     */
     private static int leerEntero(String mensaje) {
         System.out.print(mensaje);
         while (!sc.hasNextInt()) {
@@ -296,6 +335,13 @@ public class Main {
         return valor;
     }
 
+    /**
+     * Lee un numero decimal por consola, repitiendo la pregunta hasta que
+     * el usuario escriba un valor numerico valido.
+     *
+     * @param mensaje texto que se le muestra al usuario antes de leer
+     * @return el decimal leido
+     */
     private static double leerDecimal(String mensaje) {
         System.out.print(mensaje);
         while (!sc.hasNextDouble()) {
@@ -307,20 +353,35 @@ public class Main {
         return valor;
     }
 
+    /**
+     * Lee una linea de texto por consola.
+     *
+     * @param mensaje texto que se le muestra al usuario antes de leer
+     * @return el texto leido
+     */
     private static String leerTexto(String mensaje) {
         System.out.print(mensaje);
         return sc.nextLine();
     }
 
+    /**
+     * Lee una respuesta de si/no por consola.
+     *
+     * @param mensaje texto que se le muestra al usuario antes de leer
+     * @return {@code true} si el usuario escribio "s" (sin distinguir
+     *         mayusculas/minusculas), {@code false} en cualquier otro caso
+     */
     private static boolean leerBooleano(String mensaje) {
         System.out.print(mensaje);
         String texto = sc.nextLine();
         return texto.equalsIgnoreCase("s");
     }
 
-    // ========================================================================
-    // Datos de ejemplo
-    // ========================================================================
+    /**
+     * Carga algunos productos y un cliente de ejemplo al iniciar la
+     * aplicacion, para poder probar el menu sin tener que registrar todo
+     * manualmente desde cero.
+     */
     private static void precargarDatosDeEjemplo() {
         Producto bandeja = new PlatoFuerte("PF1", "Bandeja Paisa", "Bandeja tipica", 25000.0, 35,
                 700, TipoPreparacion.FRITO, true);
